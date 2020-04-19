@@ -1,0 +1,395 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.college.dao.AchievementMapper">
+    <resultMap id="BaseResultMap" type="com.edu.college.pojo.Achievement">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="user_id" jdbcType="INTEGER" property="userId"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="number" jdbcType="VARCHAR" property="number"/>
+        <result column="first_author" jdbcType="VARCHAR" property="firstAuthor"/>
+        <result column="department" jdbcType="VARCHAR" property="department"/>
+        <result column="college" jdbcType="VARCHAR" property="college"/>
+        <result column="subject" jdbcType="VARCHAR" property="subject"/>
+        <result column="categories" jdbcType="VARCHAR" property="categories"/>
+        <result column="publish_type" jdbcType="VARCHAR" property="publishType"/>
+        <result column="publish_area" jdbcType="VARCHAR" property="publishArea"/>
+        <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime"/>
+        <result column="publish_scope" jdbcType="VARCHAR" property="publishScope"/>
+        <result column="word_count" jdbcType="INTEGER" property="wordCount"/>
+        <result column="translation" jdbcType="BIT" property="translation"/>
+        <result column="result" jdbcType="BIT" property="result"/>
+        <result column="language" jdbcType="VARCHAR" property="language"/>
+        <result column="cn_issn" jdbcType="VARCHAR" property="cnIssn"/>
+        <result column="isbn" jdbcType="VARCHAR" property="isbn"/>
+        <result column="status" jdbcType="SMALLINT" property="status"/>
+        <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime"/>
+        <result column="reviewer" jdbcType="TIMESTAMP" property="reviewTime"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.edu.college.pojo.Achievement">
+        <result column="comment" jdbcType="LONGVARCHAR" property="comment"/>
+    </resultMap>
+    <resultMap id="JoinResultMap" type="com.edu.college.pojo.vo.AchievementVO" extends="ResultMapWithBLOBs">
+        <collection property="authors" javaType="java.util.List" ofType="com.edu.college.pojo.Author">
+            <id column="aid" property="id"/>
+            <id column="a_id" property="achievementId"/>
+            <id column="author_name" property="authorName"/>
+            <id column="gender" property="gender"/>
+            <id column="department" property="department"/>
+            <id column="contribution" property="contribution"/>
+            <id column="seq" property="seq"/>
+        </collection>
+        <collection property="attachments" javaType="java.util.List" ofType="com.edu.college.pojo.Attachment">
+            <id column="tid" property="id"/>
+            <id column="t_id" property="achievementId"/>
+            <id column="url" property="url"/>
+        </collection>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, title, number, first_author, department, college, subject, categories, publish_type,
+    publish_area, publish_time, publish_scope, word_count, translation, result, language, 
+    cn_issn, isbn, status, review_time, type
+    </sql>
+    <sql id="Blob_Column_List">
+        comment
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from achievement
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="get" resultMap="JoinResultMap">
+        select ac.id,
+               title,
+               number,
+               first_author,
+               ac.department,
+               college,
+               subject,
+               categories,
+               publish_type,
+               publish_area,
+               publish_time,
+               publish_scope,
+               word_count,
+               translation,
+               result,
+               language,
+               cn_issn,
+               isbn,
+               status,
+               review_time,
+               comment,
+               at.id             tid,
+               at.achievement_id t_id,
+               at.url,
+               au.id             aid,
+               au.achievement_id a_id,
+               au.author_name,
+               au.gender,
+               au.department,
+               au.contribution,
+               au.seq,
+               ac.user_id,
+               ac.type,
+               u.name
+        from achievement ac
+                 left join author au on ac.id = au.achievement_id
+                 left join attachment at on au.achievement_id = at.achievement_id
+                 left join user u on ac.user_id = u.id
+        where ac.id = #{id}
+        order by ac.id, au.seq;
+    </select>
+    <select id="selectByUserId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from achievement
+        <if test="userId!=null">
+            where user_id = #{userId}
+        </if>
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from achievement
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <insert id="insert" parameterType="com.edu.college.pojo.Achievement">
+        insert into achievement (user_id, title, number,
+                                 first_author, department, college,
+                                 subject, categories, publish_type,
+                                 publish_area, publish_time, publish_scope,
+                                 word_count, translation, result,
+                                 language, cn_issn, isbn,
+                                 status, review_time, comment, type)
+        values (#{title,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR},
+                #{firstAuthor,jdbcType=VARCHAR}, #{department,jdbcType=VARCHAR}, #{college,jdbcType=VARCHAR},
+                #{subject,jdbcType=VARCHAR}, #{categories,jdbcType=VARCHAR}, #{publishType,jdbcType=VARCHAR},
+                #{publishArea,jdbcType=VARCHAR}, #{publishTime,jdbcType=TIMESTAMP}, #{publishScope,jdbcType=VARCHAR},
+                #{wordCount,jdbcType=INTEGER}, #{translation,jdbcType=BIT}, #{result,jdbcType=BIT},
+                #{language,jdbcType=VARCHAR}, #{cnIssn,jdbcType=VARCHAR}, #{isbn,jdbcType=VARCHAR},
+                #{status,jdbcType=SMALLINT}, #{reviewTime,jdbcType=TIMESTAMP}, #{comment,jdbcType=LONGVARCHAR},
+                #{type,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.edu.college.pojo.Achievement" useGeneratedKeys="true"
+            keyProperty="id" keyColumn="id">
+        insert into achievement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                userId,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="number != null">
+                number,
+            </if>
+            <if test="firstAuthor != null">
+                first_author,
+            </if>
+            <if test="department != null">
+                department,
+            </if>
+            <if test="college != null">
+                college,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="categories != null">
+                categories,
+            </if>
+            <if test="publishType != null">
+                publish_type,
+            </if>
+            <if test="publishArea != null">
+                publish_area,
+            </if>
+            <if test="publishTime != null">
+                publish_time,
+            </if>
+            <if test="publishScope != null">
+                publish_scope,
+            </if>
+            <if test="wordCount != null">
+                word_count,
+            </if>
+            <if test="translation != null">
+                translation,
+            </if>
+            <if test="result != null">
+                result,
+            </if>
+            <if test="language != null">
+                language,
+            </if>
+            <if test="cnIssn != null">
+                cn_issn,
+            </if>
+            <if test="isbn != null">
+                isbn,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="reviewTime != null">
+                review_time,
+            </if>
+            <if test="comment != null">
+                comment,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="firstAuthor != null">
+                #{firstAuthor,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="college != null">
+                #{college,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="categories != null">
+                #{categories,jdbcType=VARCHAR},
+            </if>
+            <if test="publishType != null">
+                #{publishType,jdbcType=VARCHAR},
+            </if>
+            <if test="publishArea != null">
+                #{publishArea,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publishScope != null">
+                #{publishScope,jdbcType=VARCHAR},
+            </if>
+            <if test="wordCount != null">
+                #{wordCount,jdbcType=INTEGER},
+            </if>
+            <if test="translation != null">
+                #{translation,jdbcType=BIT},
+            </if>
+            <if test="result != null">
+                #{result,jdbcType=BIT},
+            </if>
+            <if test="language != null">
+                #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="cnIssn != null">
+                #{cnIssn,jdbcType=VARCHAR},
+            </if>
+            <if test="isbn != null">
+                #{isbn,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="reviewTime != null">
+                #{reviewTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comment != null">
+                #{comment,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.edu.college.pojo.Achievement">
+        update achievement
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=VARCHAR},
+            </if>
+            <if test="firstAuthor != null">
+                first_author = #{firstAuthor,jdbcType=VARCHAR},
+            </if>
+            <if test="department != null">
+                department = #{department,jdbcType=VARCHAR},
+            </if>
+            <if test="college != null">
+                college = #{college,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                subject = #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="categories != null">
+                categories = #{categories,jdbcType=VARCHAR},
+            </if>
+            <if test="publishType != null">
+                publish_type = #{publishType,jdbcType=VARCHAR},
+            </if>
+            <if test="publishArea != null">
+                publish_area = #{publishArea,jdbcType=VARCHAR},
+            </if>
+            <if test="publishTime != null">
+                publish_time = #{publishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publishScope != null">
+                publish_scope = #{publishScope,jdbcType=VARCHAR},
+            </if>
+            <if test="wordCount != null">
+                word_count = #{wordCount,jdbcType=INTEGER},
+            </if>
+            <if test="translation != null">
+                translation = #{translation,jdbcType=BIT},
+            </if>
+            <if test="result != null">
+                result = #{result,jdbcType=BIT},
+            </if>
+            <if test="language != null">
+                language = #{language,jdbcType=VARCHAR},
+            </if>
+            <if test="cnIssn != null">
+                cn_issn = #{cnIssn,jdbcType=VARCHAR},
+            </if>
+            <if test="isbn != null">
+                isbn = #{isbn,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=SMALLINT},
+            </if>
+            <if test="reviewTime != null">
+                review_time = #{reviewTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="comment != null">
+                comment = #{comment,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.edu.college.pojo.Achievement">
+        update achievement
+        set title         = #{title,jdbcType=VARCHAR},
+            number        = #{number,jdbcType=VARCHAR},
+            first_author  = #{firstAuthor,jdbcType=VARCHAR},
+            department    = #{department,jdbcType=VARCHAR},
+            college       = #{college,jdbcType=VARCHAR},
+            subject       = #{subject,jdbcType=VARCHAR},
+            categories    = #{categories,jdbcType=VARCHAR},
+            publish_type  = #{publishType,jdbcType=VARCHAR},
+            publish_area  = #{publishArea,jdbcType=VARCHAR},
+            publish_time  = #{publishTime,jdbcType=TIMESTAMP},
+            publish_scope = #{publishScope,jdbcType=VARCHAR},
+            word_count    = #{wordCount,jdbcType=INTEGER},
+            translation   = #{translation,jdbcType=BIT},
+            result        = #{result,jdbcType=BIT},
+            language      = #{language,jdbcType=VARCHAR},
+            cn_issn       = #{cnIssn,jdbcType=VARCHAR},
+            isbn          = #{isbn,jdbcType=VARCHAR},
+            status        = #{status,jdbcType=SMALLINT},
+            review_time   = #{reviewTime,jdbcType=TIMESTAMP},
+            comment       = #{comment,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.edu.college.pojo.Achievement">
+        update achievement
+        set title         = #{title,jdbcType=VARCHAR},
+            number        = #{number,jdbcType=VARCHAR},
+            first_author  = #{firstAuthor,jdbcType=VARCHAR},
+            department    = #{department,jdbcType=VARCHAR},
+            college       = #{college,jdbcType=VARCHAR},
+            subject       = #{subject,jdbcType=VARCHAR},
+            categories    = #{categories,jdbcType=VARCHAR},
+            publish_type  = #{publishType,jdbcType=VARCHAR},
+            publish_area  = #{publishArea,jdbcType=VARCHAR},
+            publish_time  = #{publishTime,jdbcType=TIMESTAMP},
+            publish_scope = #{publishScope,jdbcType=VARCHAR},
+            word_count    = #{wordCount,jdbcType=INTEGER},
+            translation   = #{translation,jdbcType=BIT},
+            result        = #{result,jdbcType=BIT},
+            language      = #{language,jdbcType=VARCHAR},
+            cn_issn       = #{cnIssn,jdbcType=VARCHAR},
+            isbn          = #{isbn,jdbcType=VARCHAR},
+            status        = #{status,jdbcType=SMALLINT},
+            review_time   = #{reviewTime,jdbcType=TIMESTAMP}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="review">
+        update achievement
+        set status   = #{review.status},
+            comment  = #{review.comment},
+            reviewer = #{userId}
+        where id = #{id}
+    </update>
+</mapper>

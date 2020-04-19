@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- mysql连接器驱动   -->
+    <classPathEntry
+            location="F:\Repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar"/>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <commentGenerator>
+            <!--            <property name="suppressDate" value="false"/>-->
+            <!-- 是否去除自动生成的注释 true：是 ： false:否 -->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <!-- 连接常用4个要素。-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://47.105.146.83:3306/college?useSSL=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;zeroDateTimeBehavior=convertToNull"
+                        userId="root"
+                        password="Jack2019@123"/>
+
+        <!-- 生成目标 model的包名和位置 -->
+        <javaModelGenerator targetPackage="com.edu.college.pojo"
+                            targetProject=".\src\main\java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!-- 生成mapper-xml的包名和位置。 -->
+        <sqlMapGenerator targetPackage="mybatis.mapper"
+                         targetProject=".\src\main\resources">
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+
+        <!-- 生成dao的包名和targetProject生成位置 -->
+        <javaClientGenerator targetPackage="com.edu.college.dao"
+                             targetProject=".\src\main\java" type="XMLMAPPER">
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+        <!-- 第4部分： 要生成哪些表。 -->
+        <table schema="root" tableName="achievement" domainObjectName="Achievement" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="announcement" domainObjectName="Announcement" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="attachment" domainObjectName="Attachment" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="author" domainObjectName="Author" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="group" domainObjectName="Group" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="group_role" domainObjectName="GroupRole" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="role" domainObjectName="Role" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="user" domainObjectName="User" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+        <table schema="root" tableName="user_group" domainObjectName="UserGroup" enableCountByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false" enableUpdateByExample="false"/>
+    </context>
+</generatorConfiguration>

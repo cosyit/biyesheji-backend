@@ -20,6 +20,7 @@
         <result column="result" jdbcType="BIT" property="result"/>
         <result column="language" jdbcType="VARCHAR" property="language"/>
         <result column="cn_issn" jdbcType="VARCHAR" property="cnIssn"/>
+        <result column="type" jdbcType="VARCHAR" property="type"/>
         <result column="isbn" jdbcType="VARCHAR" property="isbn"/>
         <result column="status" jdbcType="SMALLINT" property="status"/>
         <result column="review_time" jdbcType="TIMESTAMP" property="reviewTime"/>
@@ -42,6 +43,7 @@
             <id column="tid" property="id"/>
             <id column="t_id" property="achievementId"/>
             <id column="url" property="url"/>
+            <id column="filename" property="filename"/>
         </collection>
     </resultMap>
     <sql id="Base_Column_List">
@@ -94,7 +96,8 @@
                au.seq,
                ac.user_id,
                ac.type,
-               u.name
+               u.name,
+               filename
         from achievement ac
                  left join author au on ac.id = au.achievement_id
                  left join attachment at on au.achievement_id = at.achievement_id
@@ -137,7 +140,7 @@
         insert into achievement
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="userId != null">
-                userId,
+                user_id,
             </if>
             <if test="title != null">
                 title,

@@ -15,4 +15,7 @@ public class Attachment {
 
     @NonNull
     private String url;
+
+    @NonNull
+    private String filename;
 }

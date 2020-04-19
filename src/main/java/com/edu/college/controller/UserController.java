@@ -120,7 +120,7 @@ public class UserController {
             user.setTelephone(newUser.getNewTelephone());
         }
         if (Objects.nonNull(newUser.getPassword())) {
-            user.setTelephone(newUser.getPassword());
+            user.setPassword(newUser.getPassword());
         }
     }
 

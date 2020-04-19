@@ -2,6 +2,7 @@ package com.edu.college.pojo.vo;
 
 import com.edu.college.pojo.Attachment;
 import com.edu.college.pojo.Author;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -37,6 +38,7 @@ public class AchievementVO {
 
     private String publishArea;
 
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date publishTime;
 
     private String publishScope;
@@ -52,6 +54,7 @@ public class AchievementVO {
     private String cnIssn;
 
     private String isbn;
+    private String type;
 
     private Short status;
 

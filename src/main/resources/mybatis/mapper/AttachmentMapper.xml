@@ -7,7 +7,7 @@
         <result column="url" jdbcType="VARCHAR" property="url"/>
     </resultMap>
     <sql id="Base_Column_List">
-        id, achievement_id, url
+        id, achievement_id, url, filename
     </sql>
     <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
         select
@@ -26,8 +26,8 @@
         where achievement_id = #{id}
     </delete>
     <insert id="insert" parameterType="com.edu.college.pojo.Attachment">
-        insert into attachment (achievement_id, url)
-        values (#{achievementId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR})
+        insert into attachment (achievement_id, url,filename)
+        values (#{achievementId,jdbcType=INTEGER}, #{url,jdbcType=VARCHAR}, #{filename,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" parameterType="com.edu.college.pojo.Attachment">
         insert into attachment
@@ -49,11 +49,12 @@
         </trim>
     </insert>
     <insert id="insertList">
-        insert into attachment(achievement_id, url) VALUES
+        insert into attachment(achievement_id, url,filename) VALUES
         <foreach collection="list" item="a" separator=",">
             (
             #{a.achievementId},
-            #{a.url}
+            #{a.url},
+            #{a.filename}
             )
         </foreach>
     </insert>

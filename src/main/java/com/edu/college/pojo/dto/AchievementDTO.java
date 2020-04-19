@@ -1,5 +1,7 @@
 package com.edu.college.pojo.dto;
 
+import com.edu.college.pojo.Achievement;
+import com.edu.college.pojo.Attachment;
 import com.edu.college.pojo.Author;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -78,8 +80,9 @@ public class AchievementDTO {
      * ISBN号
      */
     private String isbn;
+    private String type;
 
     private List<Author> authors;
 
-    private List<String> attachments;
+    private List<Attachment> attachments;
 }

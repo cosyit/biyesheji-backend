@@ -35,8 +35,10 @@ public class AchievementServiceImpl implements AchievementService {
         mapper.insertSelective(achievement);
         dto.getAuthors().forEach(author -> author.setAchievementId(achievement.getId()));
         authorMapper.insertList(dto.getAuthors());
-        final List<Attachment> attachments = dto.getAttachments().stream().map(s -> new Attachment(achievement.getId(), s)).collect(Collectors.toList());
-        attachmentMapper.insertList(attachments);
+        final List<Attachment> attachments = dto.getAttachments().stream().map(s -> new Attachment(achievement.getId(), s.getUrl(), s.getFilename())).collect(Collectors.toList());
+        if (attachments.size() > 0) {
+            attachmentMapper.insertList(attachments);
+        }
     }
 
     @Override
@@ -59,7 +61,7 @@ public class AchievementServiceImpl implements AchievementService {
 
     @Override
     public void review(final Integer id, final Integer userId, final ReviewDTO review) {
-         mapper.review(id, userId, review);
+        mapper.review(id, userId, review);
     }
 
 }

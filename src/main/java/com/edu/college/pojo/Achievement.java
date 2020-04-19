@@ -60,6 +60,7 @@ public class Achievement {
 
     private String comment;
     private Integer reviewer;
+    private String type;
 
     public static Achievement of(AchievementDTO dto) {
         return Achievement.builder()
@@ -79,6 +80,7 @@ public class Achievement {
                 .language(dto.getLanguage())
                 .cnIssn(dto.getCnIssn())
                 .isbn(dto.getIsbn())
+                .type(dto.getType())
                 .build();
     }
 }

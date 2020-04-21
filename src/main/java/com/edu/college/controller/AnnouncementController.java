@@ -49,7 +49,7 @@ public class AnnouncementController {
     })
     @LoginRequire("管理员")
     public Response add(@ApiIgnore User user, @RequestBody AnnouncementDTO announcement) {
-        service.save(Announcement.builder().title(announcement.getTitle()).content(announcement.getContent()).fromUserId(user.getId()).build());
+        service.save(Announcement.builder().title("[公告]" + announcement.getTitle()).content(announcement.getContent()).fromUserId(user.getId()).build());
         return Response.success();
     }
 

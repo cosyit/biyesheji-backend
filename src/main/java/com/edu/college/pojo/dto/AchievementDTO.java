@@ -1,6 +1,5 @@
 package com.edu.college.pojo.dto;
 
-import com.edu.college.pojo.Achievement;
 import com.edu.college.pojo.Attachment;
 import com.edu.college.pojo.Author;
 import lombok.AllArgsConstructor;
@@ -72,6 +71,10 @@ public class AchievementDTO {
      * 语种
      */
     private String language;
+    /**
+     * 结题评价
+     */
+    private String result;
     /**
      * CN或ISSN号
      */

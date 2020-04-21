@@ -392,6 +392,7 @@
         update achievement
         set status   = #{review.status},
             comment  = #{review.comment},
+            review_time = now(),
             reviewer = #{userId}
         where id = #{id}
     </update>

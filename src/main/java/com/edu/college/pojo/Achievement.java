@@ -59,7 +59,6 @@ public class Achievement {
     private Date reviewTime;
 
     private String comment;
-    private Integer reviewer;
     private String type;
 
     public static Achievement of(AchievementDTO dto) {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class UnitTest {
     @Test
-    public void test(){
+    public void test1(){
         System.out.println(MD5Util.encrypt("123"));
     }
 }

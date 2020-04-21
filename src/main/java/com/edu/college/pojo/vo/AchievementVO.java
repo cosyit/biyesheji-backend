@@ -57,11 +57,13 @@ public class AchievementVO {
     private String type;
 
     private Short status;
-
+    @JsonFormat(pattern = "yyyy-MM-dd hh:mm:ss")
     private Date reviewTime;
 
     private String comment;
     private String reviewer;
+
+    private String reporter;
 
     private List<Author> authors;
 

@@ -38,18 +38,19 @@ public class AchievementController {
             @ApiImplicitParam(name = "number", value = "项目编号/获奖题目"),
             @ApiImplicitParam(name = "firstAuthor", value = "第一作者/完成人"),
             @ApiImplicitParam(name = "department", value = "所属单位"),
-            @ApiImplicitParam(name = "college", value = "学校署名"),
+            @ApiImplicitParam(name = "college", value = "学校署名/发证机关"),
             @ApiImplicitParam(name = "subject", value = "一级学科"),
             @ApiImplicitParam(name = "categories", value = "学课门类"),
             @ApiImplicitParam(name = "publishType", value = "刊物/著作类型/获奖类别"),
-            @ApiImplicitParam(name = "publishArea", value = "出版地/发证机关"),
+            @ApiImplicitParam(name = "publishArea", value = "出版地/项目来源/获奖类别"),
             @ApiImplicitParam(name = "publishTime", value = "发出/出版/获奖日期"),
-            @ApiImplicitParam(name = "publishScope", value = "发布/出版范围/单位/获奖级别"),
+            @ApiImplicitParam(name = "publishScope", value = "发布/出版范围/单位/获奖等级"),
             @ApiImplicitParam(name = "wordCount", value = "字数(万)/项目经费(万) 获奖人数"),
             @ApiImplicitParam(name = "translation", value = "是否译文"),
             @ApiImplicitParam(name = "language", value = "语种"),
             @ApiImplicitParam(name = "cnIssn", value = "CN或ISSN号"),
             @ApiImplicitParam(name = "isbn", value = "ISBN号"),
+            @ApiImplicitParam(name = "result", value = "结题评价"),
             @ApiImplicitParam(name = "type", value = "成果类型 1/4"),
             @ApiImplicitParam(name = "authors", value = "作者信息数组"),
             @ApiImplicitParam(name = "seq", value = "作者顺序，不可重复"),
@@ -92,6 +93,7 @@ public class AchievementController {
     @GetMapping("{id}")
     @LoginRequire
     @ApiOperation("查看成果详情，如果返回的的id为空，代表是自己的成果，不可被审核")
+    @ApiImplicitParam(name = "id", value = "成果的id")
     public Response get(@ApiIgnore User user, @PathVariable Integer id) {
         final AchievementVO achievement = service.get(id);
         if (user.getId().equals(achievement.getUserId())) {
@@ -109,7 +111,7 @@ public class AchievementController {
         service.review(id, user.getId(), review);
         // 生成一条被审核的通知
         final Announcement announcement = Announcement.builder()
-                .title("你的成果已被审核")
+                .title("[通知]你的成果已被审核")
                 .content("你的成果" + (review.getStatus() == 1 ? "已通过" : "未通过") + "审核")
                 .fromUserId(user.getId())
                 .toUserId(achievement.getUserId())
